@@ -1,45 +1,70 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
+import { Tabs } from "expo-router";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+// import BottomPlayer from "@/components/music/bottomPlayer";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function AppTabs() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
+    <>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: "#42c83c",
+          tabBarInactiveTintColor: "#f9f9f9",
+          tabBarStyle: {
+            position: "absolute",
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+            borderTopWidth: 0,
+            paddingTop: 8,
           },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarBackground: () => (
+            <BlurView
+              intensity={85}
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                overflow: "hidden",
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
+              }}
+            />
+          ),
         }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="music"
+          options={{
+            tabBarIcon: ({ color }) => {
+              return (
+                <MaterialIcons name="queue-music" size={28} color={color} />
+              );
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="playlist"
+          options={{
+            tabBarIcon: ({ color }) => {
+              return (
+                <MaterialIcons name="playlist-add" size={28} color={color} />
+              );
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="liked"
+          options={{
+            tabBarIcon: ({ color }) => {
+              return <Ionicons name="heart" size={28} color={color} />;
+            },
+          }}
+        />
+      </Tabs>
+      {/* <BottomPlayer /> */}
+          
+    </>
   );
 }
